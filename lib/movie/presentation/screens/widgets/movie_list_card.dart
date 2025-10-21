@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-class MovieCard extends StatelessWidget {
-  const MovieCard({
+class MovieListCard extends StatelessWidget {
+  const MovieListCard({
     super.key,
     required this.imagePath,
     required this.title,
