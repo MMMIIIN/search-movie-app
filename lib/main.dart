@@ -44,6 +44,6 @@ class MyHomePage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(backgroundColor: Colors.white, body: MovieMain());
+    return MovieMain();
   }
 }
