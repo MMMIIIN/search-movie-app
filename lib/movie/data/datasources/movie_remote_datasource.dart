@@ -3,11 +3,13 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:riverpod_example/core/config/env_config.dart';
 import 'package:riverpod_example/core/network/exceptions.dart';
 import 'package:riverpod_example/movie/data/models/movie_result_model.dart';
+import 'package:riverpod_example/movie/data/models/search_movie_model.dart';
 
 part 'movie_remote_datasource.g.dart';
 
 abstract class MovieRemoteDataSource {
   Future<MovieResultModel> fetchPlayingMovies();
+  Future<SearchMovieModel> searchMovie(String query);
 }
 
 class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
@@ -27,6 +29,28 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
       );
 
       return MovieResultModel.fromJson(response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      throw APIException(
+        message: e.message ?? 'Unknown error',
+        statusCode: e.response?.statusCode ?? 500,
+      );
+    } catch (e) {
+      throw APIException(message: e.toString(), statusCode: 500);
+    }
+  }
+
+  @override
+  Future<SearchMovieModel> searchMovie(String query) async {
+    try {
+      final apiKey = EnvConfig.tmdbApiKey;
+
+      final response = await dio.get(
+        '/search/movie',
+        queryParameters: {'language': 'ko-KR', 'region': 'KR', 'query': query},
+        options: Options(headers: {'Authorization': 'Bearer $apiKey'}),
+      );
+
+      return SearchMovieModel.fromJson(response.data as Map<String, dynamic>);
     } on DioException catch (e) {
       throw APIException(
         message: e.message ?? 'Unknown error',

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'playing_movie.dart';
+part of 'search_movie.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,39 +9,39 @@ part of 'playing_movie.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(PlayingMovie)
-const playingMovieProvider = PlayingMovieFamily._();
+@ProviderFor(SearchMovie)
+const searchMovieProvider = SearchMovieFamily._();
 
-final class PlayingMovieProvider
-    extends $AsyncNotifierProvider<PlayingMovie, MovieListEntity> {
-  const PlayingMovieProvider._({
-    required PlayingMovieFamily super.from,
-    required MovieSortType super.argument,
+final class SearchMovieProvider
+    extends $AsyncNotifierProvider<SearchMovie, MovieListEntity> {
+  const SearchMovieProvider._({
+    required SearchMovieFamily super.from,
+    required (String, MovieSortType) super.argument,
   }) : super(
          retry: null,
-         name: r'playingMovieProvider',
+         name: r'searchMovieProvider',
          isAutoDispose: true,
          dependencies: null,
          $allTransitiveDependencies: null,
        );
 
   @override
-  String debugGetCreateSourceHash() => _$playingMovieHash();
+  String debugGetCreateSourceHash() => _$searchMovieHash();
 
   @override
   String toString() {
-    return r'playingMovieProvider'
+    return r'searchMovieProvider'
         ''
-        '($argument)';
+        '$argument';
   }
 
   @$internal
   @override
-  PlayingMovie create() => PlayingMovie();
+  SearchMovie create() => SearchMovie();
 
   @override
   bool operator ==(Object other) {
-    return other is PlayingMovieProvider && other.argument == argument;
+    return other is SearchMovieProvider && other.argument == argument;
   }
 
   @override
@@ -50,42 +50,43 @@ final class PlayingMovieProvider
   }
 }
 
-String _$playingMovieHash() => r'b7ff8c4ac06c42b9f489bac21d03d0f0fafe349f';
+String _$searchMovieHash() => r'9992af2408735ece778933a723f208107d74a3ca';
 
-final class PlayingMovieFamily extends $Family
+final class SearchMovieFamily extends $Family
     with
         $ClassFamilyOverride<
-          PlayingMovie,
+          SearchMovie,
           AsyncValue<MovieListEntity>,
           MovieListEntity,
           FutureOr<MovieListEntity>,
-          MovieSortType
+          (String, MovieSortType)
         > {
-  const PlayingMovieFamily._()
+  const SearchMovieFamily._()
     : super(
         retry: null,
-        name: r'playingMovieProvider',
+        name: r'searchMovieProvider',
         dependencies: null,
         $allTransitiveDependencies: null,
         isAutoDispose: true,
       );
 
-  PlayingMovieProvider call(MovieSortType sortType) =>
-      PlayingMovieProvider._(argument: sortType, from: this);
+  SearchMovieProvider call(String query, MovieSortType sortType) =>
+      SearchMovieProvider._(argument: (query, sortType), from: this);
 
   @override
-  String toString() => r'playingMovieProvider';
+  String toString() => r'searchMovieProvider';
 }
 
-abstract class _$PlayingMovie extends $AsyncNotifier<MovieListEntity> {
-  late final _$args = ref.$arg as MovieSortType;
-  MovieSortType get sortType => _$args;
+abstract class _$SearchMovie extends $AsyncNotifier<MovieListEntity> {
+  late final _$args = ref.$arg as (String, MovieSortType);
+  String get query => _$args.$1;
+  MovieSortType get sortType => _$args.$2;
 
-  FutureOr<MovieListEntity> build(MovieSortType sortType);
+  FutureOr<MovieListEntity> build(String query, MovieSortType sortType);
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
+    final created = build(_$args.$1, _$args.$2);
     final ref = this.ref as $Ref<AsyncValue<MovieListEntity>, MovieListEntity>;
     final element =
         ref.element

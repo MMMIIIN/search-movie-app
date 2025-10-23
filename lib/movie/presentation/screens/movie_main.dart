@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_example/movie/domain/usecase/sort_movies_usecase.dart';
 import 'package:riverpod_example/movie/presentation/provider/playing_movie.dart';
+import 'package:riverpod_example/movie/presentation/provider/search_movie.dart';
 import 'package:riverpod_example/movie/presentation/screens/widgets/movie_grid_card.dart';
 import 'package:riverpod_example/movie/presentation/screens/widgets/movie_list_card.dart';
 import 'package:riverpod_example/movie/presentation/screens/widgets/sort_filter_button.dart';
@@ -14,13 +15,23 @@ class MovieMain extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final sortType = useState(MovieSortType.voteAverageHigh);
-    final state = ref.watch(playingMovieProvider(sortType.value));
     final isGridView = useState(false);
     final searchQuery = useState('');
     final debouncedSearchQuery = useDebounced(
       searchQuery.value,
       const Duration(seconds: 1),
     );
+
+    // 두 provider를 각각 watch
+    final playingMovies = ref.watch(playingMovieProvider(sortType.value));
+    final searchMovies = ref.watch(
+      searchMovieProvider(debouncedSearchQuery ?? "", sortType.value),
+    );
+
+    // 검색어에 따라 어떤 state를 사용할지 결정
+    final state = debouncedSearchQuery?.isEmpty ?? true
+        ? playingMovies
+        : searchMovies;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -63,17 +74,7 @@ class MovieMain extends HookConsumerWidget {
           Expanded(
             child: state.when(
               data: (movieResult) {
-                final filteredMovies = debouncedSearchQuery?.isEmpty ?? false
-                    ? movieResult.results
-                    : movieResult.results
-                          .where(
-                            (movie) => movie.title.toLowerCase().contains(
-                              debouncedSearchQuery!.toLowerCase(),
-                            ),
-                          )
-                          .toList();
-
-                if (filteredMovies.isEmpty) {
+                if (movieResult.results.isEmpty) {
                   return const Center(child: Text('No Data'));
                 }
                 return isGridView.value
@@ -87,25 +88,26 @@ class MovieMain extends HookConsumerWidget {
                                 mainAxisSpacing: 16,
                                 childAspectRatio: 7 / 16,
                               ),
-                          itemCount: filteredMovies.length,
+                          itemCount: movieResult.results.length,
                           itemBuilder: (context, index) {
                             return MovieGridCard(
-                              imagePath: filteredMovies[index].posterPath,
-                              title: filteredMovies[index].title,
-                              overview: filteredMovies[index].overview,
-                              voteAverage: filteredMovies[index].voteAverage,
+                              imagePath: movieResult.results[index].posterPath,
+                              title: movieResult.results[index].title,
+                              overview: movieResult.results[index].overview,
+                              voteAverage:
+                                  movieResult.results[index].voteAverage,
                             );
                           },
                         ),
                       )
                     : ListView.builder(
-                        itemCount: filteredMovies.length,
+                        itemCount: movieResult.results.length,
                         itemBuilder: (context, index) {
                           return MovieListCard(
-                            imagePath: filteredMovies[index].posterPath,
-                            title: filteredMovies[index].title,
-                            overview: filteredMovies[index].overview,
-                            voteAverage: filteredMovies[index].voteAverage,
+                            imagePath: movieResult.results[index].posterPath,
+                            title: movieResult.results[index].title,
+                            overview: movieResult.results[index].overview,
+                            voteAverage: movieResult.results[index].voteAverage,
                           );
                         },
                       );
