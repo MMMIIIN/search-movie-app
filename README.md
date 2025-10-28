@@ -1,25 +1,74 @@
-# riverpod_example
+# TMDB Movie App
 
-A new Flutter project.
+Flutter + Riverpod을 사용한 영화 검색 앱
 
-## Getting Started
+## 🎬 주요 기능
 
-This project is a starting point for a Flutter application.
+- 영화 목록 조회 (현재 상영작)
+- 실시간 검색 (1초 debouncing)
+- 정렬 (평점/인기도/개봉일)
+- Grid/List 뷰 전환
 
-A few resources to get you started if this is your first Flutter project:
+## 🏗️ 아키텍처
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Clean Architecture + Riverpod
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```
+lib/movie/
+├── data/         # DataSource, Repository 구현, Model
+├── domain/       # Entity, Repository 인터페이스, UseCase
+└── presentation/ # Provider, UI
+```
 
-### 한 번만 빌드
+## 📦 주요 패키지
+
+- `riverpod` + `hooks_riverpod` - 상태 관리
+- `dio` - HTTP 클라이언트
+- `dartz` - Either (에러 처리)
+- `mockito` - 테스트
+
+## 🚀 시작하기
+
+### 1. 의존성 설치
+```bash
+flutter pub get
+```
+
+### 2. 코드 생성
+한 번만 빌드
+```bash
 flutter pub run build_runner build
+```
 
-### 파일 변경 감지하며 자동 빌드 (watch 모드)
+파일 변경 감지하며 자동 빌드 (watch 모드)
+```bash
 flutter pub run build_runner watch
+```
 
-### 기존 생성 파일 삭제 후 재빌드
+기존 생성 파일 삭제 후 재빌드
+```bash
 flutter pub run build_runner build --delete-conflicting-outputs
+```
+
+### 3. API 키 설정
+
+`.env.apikey` 파일 생성:
+```
+TMDB_API_KEY=your_api_key_here
+```
+
+### 4. 실행
+```bash
+flutter run
+```
+
+## 🧪 테스트
+
+```bash
+flutter test
+```
+
+- Domain Layer: UseCase 단위 테스트
+- Data Layer: Repository, DataSource 테스트
+- Presentation Layer: Provider 테스트
+
