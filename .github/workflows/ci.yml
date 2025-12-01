@@ -8,16 +8,24 @@ on:
 
 jobs:
   build-and-test:
+    name: Run Flutter Tests
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout source code
+        uses: actions/checkout@v3
 
-      - uses: subosito/flutter-action@v2
+      - name: Install Flutter SDK
+        uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.x'
+          flutter-version: '3.32.0'
           channel: 'stable'
           cache: true
+
+      - name: Check Dart & Flutter version
+        run: |
+          flutter --version
+          dart --version
 
       - name: Install dependencies
         run: flutter pub get
@@ -30,3 +38,10 @@ jobs:
 
       - name: Run tests
         run: flutter test
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test/
