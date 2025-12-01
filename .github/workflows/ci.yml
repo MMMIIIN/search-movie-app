@@ -26,6 +26,9 @@ jobs:
           flutter --version
           dart --version
 
+      - name: Create dummy env file
+        run: echo "TMDB_API_KEY=dummy" > .env.apikey
+
       - name: Install dependencies
         run: flutter pub get
 
