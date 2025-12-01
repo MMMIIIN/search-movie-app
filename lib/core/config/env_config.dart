@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 class EnvConfig {
@@ -14,7 +15,7 @@ class EnvConfig {
         }
       }
     } catch (e) {
-      print('Error loading .env.apikey: $e');
+      debugPrint('Error loading .env.apikey: $e');
     }
   }
 

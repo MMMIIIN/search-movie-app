@@ -1,6 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:riverpod_example/movie/domain/entities/movie_list_entity.dart';
-import 'package:riverpod_example/movie/domain/entities/movie_result_entity.dart';
 import 'package:riverpod_example/movie/domain/entities/search_movie_entity.dart';
 import 'package:riverpod_example/movie/domain/usecase/fetch_search_movie_usecase.dart';
 import 'package:riverpod_example/movie/domain/usecase/sort_movies_usecase.dart';
