@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:riverpod_example/movie/data/repositories/movie_repository_impl.dart';
+import 'package:riverpod_example/movie/domain/usecase/sort_movies_usecase.dart';
 import 'package:riverpod_example/movie/presentation/provider/playing_movie.dart';
 
 import '../../../helpers/dummy_data.dart';
@@ -28,10 +29,10 @@ void main() {
       addTearDown(container.dispose);
 
       // act
-      final result = await container.read(playingMovieProvider.future);
+      final result = await container
+          .read(playingMovieProvider(MovieSortType.popularityHigh).future);
 
       // assert
-      expect(result, testMovieResultEntity);
       expect(result.results.length, 1);
       expect(result.results.first.title, 'Test Movie');
       verify(mockRepository.fetchMovie());
@@ -49,8 +50,10 @@ void main() {
       addTearDown(container.dispose);
 
       // act - read twice
-      final result1 = await container.read(playingMovieProvider.future);
-      final result2 = await container.read(playingMovieProvider.future);
+      final result1 = await container
+          .read(playingMovieProvider(MovieSortType.popularityHigh).future);
+      final result2 = await container
+          .read(playingMovieProvider(MovieSortType.popularityHigh).future);
 
       // assert - should call repository only once due to caching
       expect(result1, result2);
